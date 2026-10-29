@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Book requests | BookLoop</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="section cart-page">
+  <a class="back-link" th:href="@{/}">← Back to books</a>
+  <div class="section-heading"><div><p class="eyebrow">THE COMMUNITY WISHLIST</p><h1>Book requests</h1><p class="muted">Have one of these? Contact the student directly.</p></div></div>
+  <div class="cart-list" th:if="${!requests.isEmpty()}">
+    <article class="cart-item" th:each="r : ${requests}">
+      <div class="cart-book-icon">🔎</div>
+      <div class="cart-details">
+        <h3 th:text="${r.title}">Book title</h3>
+        <p class="muted small" th:text="${r.course + ' · Semester ' + r.semester + ' · ' + r.college}">CSE · Semester 3 · College</p>
+        <p class="small"><strong>Contact:</strong> <span th:text="${r.contact}">student@example.com</span></p>
+      </div>
+    </article>
+  </div>
+  <div class="empty-state" th:if="${requests.isEmpty()}"><div class="empty-icon">📭</div><h3>No requests yet</h3><p>Be the first to ask for a book.</p><a class="button button-primary" th:href="@{/need-book}">Request a book</a></div>
+</main>
+<footer><a class="brand" th:href="@{/}"><span class="brand-icon">B</span> BookLoop</a><span>Share knowledge. Reuse books. Help your campus.</span></footer>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Selected books | BookLoop</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="section cart-page">
+  <a class="back-link" th:href="@{/}">← Continue exploring</a>
+  <div class="section-heading"><div><p class="eyebrow">YOUR SHORTLIST</p><h1>Selected books</h1><p class="muted">Keep track of books you want to ask about.</p></div></div>
+  <div class="cart-list" th:if="${!cartBooks.isEmpty()}">
+    <article class="cart-item" th:each="book : ${cartBooks}">
+      <div class="cart-book-icon">📘</div><div class="cart-details"><h3 th:text="${book.title}">Book title</h3><p class="muted small" th:text="${book.author + ' · ' + book.college}">Author · College</p><p class="muted small" th:text="${book.listingType + ' · ' + book.bookCondition}">Sale · Good</p><p class="small"><strong>Contact seller:</strong> <span th:text="${book.sellerContact}">seller@example.com</span></p></div>
+      <strong th:text="${book.listingType == 'Exchange' ? 'Exchange' : '₹' + #numbers.formatDecimal(book.price,1,2)}">₹200</strong>
+      <form th:action="@{/cart/remove/{id}(id=${book.id})}" method="post"><button class="remove-button" type="submit">Remove</button></form>
+    </article>
+    <div class="cart-note"><strong>Demo note:</strong> This is a shortlist only. Contact the seller directly to discuss availability. No payment is collected by this website.</div>
+  </div>
+  <div class="empty-state" th:if="${cartBooks.isEmpty()}"><div class="empty-icon">🛒</div><h3>No selected books yet</h3><p>Add books from the home page to see them here.</p><a class="button button-primary" th:href="@{/}">Explore books</a></div>
+</main>
+<footer><a class="brand" th:href="@{/}"><span class="brand-icon">B</span> BookLoop</a><span>Share knowledge. Reuse books. Help your campus.</span></footer>
+</body>
+</html>

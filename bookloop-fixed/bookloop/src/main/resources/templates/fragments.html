@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="nav" class="site-header">
+  <a class="brand" th:href="@{/}"><span class="brand-icon">B</span> BookLoop</a>
+  <nav>
+    <a th:href="@{/}">Explore books</a>
+    <a th:href="@{/sell}">Sell a book</a>
+    <a th:href="@{/need-book}">Need a book?</a>
+    <a th:href="@{/requests}">Requests</a>
+    <a class="nav-cart" th:href="@{/cart}">Selected books</a>
+  </nav>
+</header>
+</body>
+</html>

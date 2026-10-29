@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookLoop | Campus Book Exchange</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">YOUR CAMPUS. YOUR BOOK COMMUNITY.</p>
+      <h1>Good books deserve<br><span>a second chapter.</span></h1>
+      <p class="hero-text">Buy, sell, rent or exchange academic books with students in your campus community.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="#book-list">Explore books</a>
+        <a class="button button-light" th:href="@{/sell}">List a book +</a>
+      </div>
+      <div class="mini-stats"><span>♻ Save money</span><span>📚 Reuse books</span><span>🎓 Help students</span></div>
+    </div>
+    <div class="hero-art">
+      <div class="art-circle"></div><div class="book-stack"><div class="book book-one">LEARN<br>EVERY DAY</div><div class="book book-two">IDEAS<br>IN MOTION</div><div class="book book-three">YOUR NEXT<br>CHAPTER</div></div>
+      <div class="floating-note">Pass it on ✨</div>
+    </div>
+  </section>
+
+  <div th:if="${successMessage}" class="alert success" th:text="${successMessage}"></div>
+  <div th:if="${errorMessage}" class="alert error" th:text="${errorMessage}"></div>
+
+  <section class="section" id="book-list">
+    <div class="section-heading">
+      <div><p class="eyebrow">THE CAMPUS SHELF</p><h2>Find your next book</h2><p class="muted">Affordable reads, shared by students like you.</p></div>
+      <a class="text-link" th:href="@{/sell}">Have a book to share? →</a>
+    </div>
+    <form class="search-panel" th:action="@{/}" method="get">
+      <label class="search-field"><span>⌕</span><input type="text" name="title" placeholder="Search by book title..." th:value="${title}"></label>
+      <select name="course" aria-label="Filter by course">
+        <option value="">All courses</option>
+        <option value="CSE" th:selected="${selectedCourse == 'CSE'}">CSE</option>
+        <option value="ECE" th:selected="${selectedCourse == 'ECE'}">ECE</option>
+        <option value="EEE" th:selected="${selectedCourse == 'EEE'}">EEE</option>
+        <option value="ME" th:selected="${selectedCourse == 'ME'}">Mechanical</option>
+        <option value="CE" th:selected="${selectedCourse == 'CE'}">Civil</option>
+        <option value="Other" th:selected="${selectedCourse == 'Other'}">Other</option>
+      </select>
+      <select name="semester" aria-label="Filter by semester">
+        <option value="">All semesters</option>
+        <option th:each="s : ${#numbers.sequence(1,8)}" th:value="${s}" th:text="'Semester ' + ${s}" th:selected="${selectedSemester != null and selectedSemester == s}"></option>
+      </select>
+      <button class="button button-primary" type="submit">Search</button>
+    </form>
+
+    <div class="book-grid" th:if="${!books.isEmpty()}">
+      <article class="book-card" th:each="book, stat : ${books}">
+        <div class="cover" th:classappend="${' cover-' + (stat.index % 4)}">
+          <span class="cover-label" th:text="${book.listingType}">SALE</span>
+          <div class="cover-lines"></div>
+          <div class="cover-title" th:text="${book.title}">Book title</div>
+          <div class="cover-author" th:text="${book.author}">Author</div>
+        </div>
+        <div class="book-info">
+          <div class="book-meta"><span th:text="${book.course}">CSE</span><span th:text="'Semester ' + ${book.semester}">Semester 1</span></div>
+          <h3 th:text="${book.title}">Book title</h3>
+          <p class="muted small" th:text="${book.author}">Author</p>
+          <p class="muted small" th:text="${book.college}">College</p>
+          <div class="book-bottom">
+            <strong th:text="${book.listingType == 'Exchange' ? 'Exchange' : '₹' + #numbers.formatDecimal(book.price,1,2)}">₹200</strong>
+            <form th:action="@{/cart/add/{id}(id=${book.id})}" method="post"><button class="icon-button" type="submit" title="Add to selected books">＋</button></form>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="empty-state" th:if="${books.isEmpty()}"><div class="empty-icon">📚</div><h3>No books found yet</h3><p>Try another search, or be the first to list a book.</p><a class="button button-primary" th:href="@{/sell}">List a book</a></div>
+  </section>
+
+  <section class="request-banner">
+    <div><p class="eyebrow">CAN'T FIND WHAT YOU NEED?</p><h2>Your next textbook might be<br>on someone else's shelf.</h2><p class="muted">Tell the community what you are looking for.</p></div>
+    <a class="button button-dark" th:href="@{/need-book}">Request a book →</a>
+  </section>
+</main>
+<footer><a class="brand" th:href="@{/}"><span class="brand-icon">B</span> BookLoop</a><span>Share knowledge. Reuse books. Help your campus.</span></footer>
+</body>
+</html>

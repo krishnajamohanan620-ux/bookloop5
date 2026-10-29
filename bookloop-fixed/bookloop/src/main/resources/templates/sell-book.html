@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>List a book | BookLoop</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="form-page">
+  <a class="back-link" th:href="@{/}">← Back to books</a>
+  <div class="form-heading"><p class="eyebrow">GIVE YOUR BOOK A NEW HOME</p><h1>List a book</h1><p class="muted">Fill in the details so another student can find it.</p></div>
+  <form class="form-card" th:action="@{/sell}" th:object="${book}" method="post">
+    <div class="form-grid">
+      <label class="full">Book title *<input type="text" th:field="*{title}" placeholder="e.g. Java: The Complete Reference" required><small class="field-error" th:errors="*{title}"></small></label>
+      <label>Author *<input type="text" th:field="*{author}" placeholder="Author name" required><small class="field-error" th:errors="*{author}"></small></label>
+      <label>Course *<select th:field="*{course}" required><option value="">Choose course</option><option value="CSE">CSE</option><option value="ECE">ECE</option><option value="EEE">EEE</option><option value="ME">Mechanical</option><option value="CE">Civil</option><option value="Other">Other</option></select><small class="field-error" th:errors="*{course}"></small></label>
+      <label>Semester *<select th:field="*{semester}" required><option value="">Choose semester</option><option th:each="s : ${#numbers.sequence(1,8)}" th:value="${s}" th:text="${s}"></option></select><small class="field-error" th:errors="*{semester}"></small></label>
+      <label>College *<input type="text" th:field="*{college}" placeholder="Your college name" required><small class="field-error" th:errors="*{college}"></small></label>
+      <label>Price in ₹ *<input type="number" th:field="*{price}" min="0" step="0.01" placeholder="e.g. 250 (0 for exchange)" required><small class="field-error" th:errors="*{price}"></small></label>
+      <label>Book condition *<select th:field="*{bookCondition}" required><option value="">Choose condition</option><option value="Like New">Like New</option><option value="Good">Good</option><option value="Fair">Fair</option></select><small class="field-error" th:errors="*{bookCondition}"></small></label>
+      <label>Listing type *<select th:field="*{listingType}" required><option value="">Choose listing type</option><option value="Sale">Sale</option><option value="Rental">Rental</option><option value="Exchange">Exchange</option></select><small class="field-error" th:errors="*{listingType}"></small></label>
+      <label class="full">Seller contact *<input type="text" th:field="*{sellerContact}" placeholder="College email or contact number" required><small class="field-error" th:errors="*{sellerContact}"></small></label>
+    </div>
+    <p class="form-note">For this college demo, use test contact details rather than publishing anyone's private number.</p>
+    <button class="button button-primary button-wide" type="submit">Publish book listing →</button>
+  </form>
+</main>
+<footer><a class="brand" th:href="@{/}"><span class="brand-icon">B</span> BookLoop</a><span>Share knowledge. Reuse books. Help your campus.</span></footer>
+</body>
+</html>
